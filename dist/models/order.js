@@ -20,8 +20,8 @@ class orders {
     }
     async showUserOrders(userId) {
         const connect = await database_1.default.connect();
-        const sql = `SELECT * FROM orders WHERE userId=${userId}`;
-        const result = await connect.query(sql);
+        const sql = "SELECT * FROM orders WHERE userId=($1)";
+        const result = await connect.query(sql, [userId]);
         connect.release();
         return result.rows[0];
     }
@@ -69,6 +69,18 @@ class orders {
         }
         catch (err) {
             throw new Error(`no active orders : ${err}`);
+        }
+    }
+    async createOrder(userId) {
+        try {
+            const connect = await database_1.default.connect();
+            const sql = "INSERT INTO orders (userId, status) VALUES ($1, $2) RETURNING *";
+            const result = await connect.query(sql, [userId, "active"]);
+            connect.release();
+            return result.rows[0];
+        }
+        catch (err) {
+            throw new Error(`failed to create order ${err}`);
         }
     }
 }

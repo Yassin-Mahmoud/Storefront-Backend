@@ -21,8 +21,8 @@ class products {
     async showProduct(id) {
         try {
             const connect = await database_1.default.connect();
-            const sql = `SELECT * FROM products WHERE id=${id}`;
-            const result = await connect.query(sql);
+            const sql = "SELECT * FROM products WHERE id=($1)";
+            const result = await connect.query(sql, [id]);
             connect.release();
             return result.rows[0];
         }
@@ -45,8 +45,8 @@ class products {
     async deleteProduct(id) {
         try {
             const connect = await database_1.default.connect();
-            const sql = `DELETE FROM products WHERE id=${id}`;
-            const result = await connect.query(sql);
+            const sql = "DELETE FROM products WHERE id=($1)";
+            const result = await connect.query(sql, [id]);
             connect.release();
             return result.rows[0];
         }

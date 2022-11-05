@@ -28,8 +28,8 @@ class users {
     async showUser(id) {
         try {
             const connect = await database_1.default.connect();
-            const sql = `SELECT id, firstName, lastName, userName FROM users WHERE id=${id}`;
-            const result = await connect.query(sql);
+            const sql = "SELECT id, firstName, lastName, userName FROM users WHERE id=($1)";
+            const result = await connect.query(sql, [id]);
             connect.release();
             return result.rows[0];
         }
@@ -57,8 +57,8 @@ class users {
     async deleteUser(id) {
         try {
             const connect = await database_1.default.connect();
-            const sql = `DELETE FROM users WHERE id=${id}`;
-            const result = await connect.query(sql);
+            const sql = "DELETE FROM users WHERE id=($1)";
+            const result = await connect.query(sql, [id]);
             connect.release();
             return result.rows[0];
         }
@@ -75,13 +75,15 @@ class users {
             ]);
             if (sqlActiveOrderResult.rows[0]) {
                 const orderIdSql = "SELECT id FROM orders WHERE userId=($1) AND status='active'";
-                const orderIdSqlResult = await connect.query(orderIdSql, [
-                    userId,
-                ]);
+                const orderIdSqlResult = await connect.query(orderIdSql, [userId]);
                 const orderId = orderIdSqlResult.rows[0].id;
                 try {
                     const orderProduct = "INSERT INTO orderProducts (orderId, productId, quantity) VALUES($1, $2, $3) RETURNING *";
-                    const orderProductResult = await connect.query(orderProduct, [orderId, productId, quantity]);
+                    const orderProductResult = await connect.query(orderProduct, [
+                        orderId,
+                        productId,
+                        quantity,
+                    ]);
                     connect.release();
                     return orderProductResult.rows[0];
                 }
@@ -93,9 +95,7 @@ class users {
                 const sql = "INSERT INTO orders (userId,  status) VALUES($1, $2) RETURNING *";
                 await connect.query(sql, [userId, "active"]);
                 const orderIdSql = "SELECT id FROM orders WHERE userId=($1) AND status='active'";
-                const orderIdSqlResult = await connect.query(orderIdSql, [
-                    userId,
-                ]);
+                const orderIdSqlResult = await connect.query(orderIdSql, [userId]);
                 const orderId = orderIdSqlResult.rows[0].id;
                 try {
                     const sqlProduct = "INSERT INTO orderProducts (orderId, productId, quantity) VALUES($1, $2, $3) RETURNING *";
