@@ -15,6 +15,7 @@ describe("Testing orders model", () => {
         userName: "test333",
         password: "test12321",
     };
+    var orderId;
     describe("Create Order", () => {
         it("method exists", () => {
             expect(ORDERS.createOrder).toBeDefined();
@@ -26,14 +27,42 @@ describe("Testing orders model", () => {
         it("creates orders without errors", async () => {
             const newOrder = await ORDERS.createOrder(testUser.id);
             expect(newOrder).toBeDefined();
+            orderId = newOrder.id;
+        });
+    });
+    describe("Show order", () => {
+        it("method exists", () => {
+            expect(ORDERS.showOrder).toBeDefined();
+        });
+        it("shows a specific order belongs to the user", async () => {
+            const userOrder = await ORDERS.showOrder(testUser.id, orderId);
+            expect(userOrder).not.toBeNull();
+        });
+    });
+    describe("Show active order", () => {
+        it("method exists", () => {
+            expect(ORDERS.showActiveOrder).toBeDefined();
+        });
+        it("shows user's active order", async () => {
+            const activeOrder = await ORDERS.showActiveOrder(testUser.id);
+            expect(activeOrder.status).toEqual("active");
+        });
+    });
+    describe("Change order status", () => {
+        it("method exists", () => {
+            expect(ORDERS.changeStatus).toBeDefined();
+        });
+        it("changes order status from 'active' to 'completed' ", async () => {
+            const changeOrderStatus = await ORDERS.changeStatus(testUser.id);
+            expect(changeOrderStatus).not.toBeNull();
         });
     });
     describe("Show user orders", () => {
-        it("method exists", async () => {
-            expect(ORDERS.showUserOrders).toBeDefined();
+        it("method exists", () => {
+            expect(ORDERS.showCompletedOrders).toBeDefined();
         });
         it("shows all user orders without errors", async () => {
-            const orders = await ORDERS.showUserOrders(testUser.id);
+            const orders = await ORDERS.showCompletedOrders(testUser.id);
             expect(orders).not.toBeNull();
         });
     });
