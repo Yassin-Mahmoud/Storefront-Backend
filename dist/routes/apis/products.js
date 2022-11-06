@@ -22,13 +22,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const handlers = __importStar(require("../../handlers/product"));
+const authentication_1 = __importDefault(require("../../middleware/authentication"));
 const productsRoutes = (0, express_1.Router)();
 productsRoutes.get("/", handlers.index);
-productsRoutes.get("/showproduct/:id", handlers.showProduct);
-productsRoutes.post("/createproduct", handlers.createProduct);
-productsRoutes.delete("/deleteproduct/:id", handlers.deleteProduct);
+productsRoutes.get("/:id", handlers.showProduct);
+productsRoutes.post("/createproduct", authentication_1.default, handlers.createProduct);
+productsRoutes.delete("/delete/:id", authentication_1.default, handlers.deleteProduct);
 exports.default = productsRoutes;
 //# sourceMappingURL=products.js.map

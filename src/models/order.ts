@@ -29,12 +29,28 @@ export class orders {
 	}
 
 	// show completed user orders
-	async showCompletedOrders(userId: string): Promise<order> {
-		const connect = await db.connect();
-		const sql = "SELECT * FROM orders WHERE userId=($1) AND status='completed'";
-		const result = await connect.query(sql, [userId]);
-		connect.release();
-		return result.rows[0];
+	async showCompletedOrders(userId: string): Promise<order[]> {
+		try {
+			const connect = await db.connect();
+			const sql =
+				"SELECT * FROM orders WHERE userId=($1) AND status='completed'";
+			const result = await connect.query(sql, [userId]);
+			// const completedOrders: order[] = result.rows.map((order) => {
+			// 	const { id, userId, status }: order = order;
+			// 	return (Oid: string, OuserId: string, Ostatus: string): order => {
+			// 			id: Oid,
+			// 			userId: OuserId,
+			// 			status: Ostatus,
+			// 	};
+			// });
+			const ordersList = result.rows.map(
+				(order) => new order(order.id, order.userId, order.status)
+			);
+			connect.release();
+			return ordersList;
+		} catch (err) {
+			throw new Error(`no completed orders : ${err}`);
+		}
 	}
 
 	// show a specific order belongs to a user
@@ -72,14 +88,11 @@ export class orders {
 				"SELECT * FROM orders WHERE userId=($1) AND status='active'";
 			const activeOrderQuery = await connect.query(activeOrder, [userId]);
 			if (activeOrderQuery.rows[0]) {
-				// getting order id
-				const sqlOrderId =
-					"SELECT id FROM orders WHERE userId=($1) AND status='active'";
-				const sqlOrderIdResult = await connect.query(sqlOrderId, [userId]);
+				const orderId = activeOrderQuery.rows[0].id;
 				// updating 'active' status
 				const sql =
-					"UPDATE orders SET status='completed' WHERE userId=($1) AND id=($2)";
-				const result = await connect.query(sql, [userId, sqlOrderIdResult]);
+					"UPDATE orders SET status='completed' WHERE userId=($1) AND id=($2) RETURNING *";
+				const result = await connect.query(sql, [userId, orderId]);
 				connect.release();
 				return result.rows[0];
 			} else {

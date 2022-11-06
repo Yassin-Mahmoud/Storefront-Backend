@@ -4,17 +4,12 @@ import verifyToken from "../../middleware/authentication";
 
 const orderRoutes = Router();
 
-orderRoutes.get(
-	"/user/:userid/",
+orderRoutes.get("/user/:userId", verifyToken, handlers.showUserCompletedOrders);
+orderRoutes.get("/active/user/:userId", verifyToken, handlers.showActiveOrder);
+orderRoutes.put(
+	"/user/:userId/ordercompleted",
 	verifyToken,
-	handlers.showUserCompletedOrders
+	handlers.changeStatus
 );
-orderRoutes.get("/:orderid/user/userid", verifyToken, handlers.showOrder);
-orderRoutes.get(
-	"/user/:userid/activeorder",
-	verifyToken,
-	handlers.showActiveOrder
-);
-orderRoutes.put("/user/:userId/activeorder/completed", handlers.changeStatus);
 
 export default orderRoutes;

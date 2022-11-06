@@ -11,12 +11,14 @@ dotenv_1.default.config();
 const USERS = new user_1.users();
 const index = async (_req, res) => {
     const theUsers = await USERS.index();
-    res.json(theUsers);
+    res.status(200).json(theUsers);
 };
 exports.index = index;
 const showUser = async (req, res) => {
     const theUser = await USERS.showUser(req.params.id);
-    res.json(theUser);
+    res.json({
+        userInfo: { ...theUser },
+    });
 };
 exports.showUser = showUser;
 const createUser = async (req, res) => {
@@ -28,8 +30,9 @@ const createUser = async (req, res) => {
             password: req.body.password,
         };
         const newUser = await USERS.createUser(addNewUser);
+        const token = jsonwebtoken_1.default.sign(addNewUser, process.env.SECRET_TOKEN);
         res.status(200).json({
-            new_user: { ...newUser },
+            new_user: { ...newUser, token },
             message: "User created successfully",
         });
     }
@@ -48,7 +51,7 @@ const deleteUser = async (req, res) => {
 exports.deleteUser = deleteUser;
 const addProducts = async (req, res) => {
     const addProduct = await USERS.addProduct(req.params.userId, req.body.productId, req.body.quantity);
-    res.json({
+    res.status(200).json({
         product: { ...addProduct },
         message: "product added",
     });
@@ -56,10 +59,10 @@ const addProducts = async (req, res) => {
 exports.addProducts = addProducts;
 const authenticate = async (req, res) => {
     try {
-        const login = await USERS.authentication(req.body.userName, req.body.password);
-        const token = jsonwebtoken_1.default.sign(login, process.env.SECRET_TOKEN);
-        return res.json({
-            userInfo: { ...login, token },
+        const auth = await USERS.authentication(req.body.userName, req.body.password);
+        const token = jsonwebtoken_1.default.sign(auth, process.env.SECRET_TOKEN);
+        return res.status(200).json({
+            userInfo: { ...auth, token },
             message: "you are authenticated",
         });
     }
