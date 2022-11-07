@@ -6,16 +6,24 @@ const USERS = new users();
 
 // show users
 export const index = async (_req: Request, res: Response): Promise<void> => {
-	const theUsers = await USERS.index();
-	res.status(200).json({ ...theUsers });
+	try {
+		const theUsers = await USERS.index();
+		res.status(200).json({ ...theUsers });
+	} catch (err) {
+		res.status(500).send(err);
+	}
 };
 
 // show a specific user
 export const showUser = async (req: Request, res: Response): Promise<void> => {
-	const theUser = await USERS.showUser(req.params.id as string);
-	res.json({
-		userInfo: { ...theUser },
-	});
+	try {
+		const theUser = await USERS.showUser(req.params.id as string);
+		res.json({
+			userInfo: { ...theUser },
+		});
+	} catch (err) {
+		res.status(500).send(err);
+	}
 };
 
 // create new user
@@ -47,10 +55,14 @@ export const deleteUser = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
-	await USERS.deleteUser(req.params.id as string);
-	res.json({
-		message: "user deleted successfully",
-	});
+	try {
+		await USERS.deleteUser(req.params.id as string);
+		res.json({
+			message: "user deleted successfully",
+		});
+	} catch (err) {
+		res.status(500).send(err);
+	}
 };
 
 // add products to order
@@ -58,15 +70,19 @@ export const addProducts = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
-	const addProduct = await USERS.addProduct(
-		req.params.userId as string,
-		req.body.productId as string,
-		req.body.quantity as number
-	);
-	res.status(200).json({
-		addedProduct: { ...addProduct },
-		message: "product added",
-	});
+	try {
+		const addProduct = await USERS.addProduct(
+			req.params.userId as string,
+			req.body.productId as string,
+			req.body.quantity as number
+		);
+		res.status(200).json({
+			addedProduct: { ...addProduct },
+			message: "product added",
+		});
+	} catch (err) {
+		res.status(500).send(err);
+	}
 };
 
 // authentication

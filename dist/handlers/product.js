@@ -14,8 +14,13 @@ const index = async (_req, res) => {
 };
 exports.index = index;
 const showProduct = async (req, res) => {
-    const theProduct = await PRODUCTS.showProduct(req.params.id);
-    res.status(200).json({ ...theProduct });
+    try {
+        const theProduct = await PRODUCTS.showProduct(req.params.id);
+        res.status(200).json({ ...theProduct });
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
 };
 exports.showProduct = showProduct;
 const createProduct = async (req, res) => {
@@ -36,8 +41,13 @@ const createProduct = async (req, res) => {
 };
 exports.createProduct = createProduct;
 const deleteProduct = async (req, res) => {
-    await PRODUCTS.deleteProduct(req.params.id);
-    res.json({ message: "Product deleted successfully" });
+    try {
+        await PRODUCTS.deleteProduct(req.params.id);
+        res.json({ message: "Product deleted successfully" });
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
 };
 exports.deleteProduct = deleteProduct;
 //# sourceMappingURL=product.js.map

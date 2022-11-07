@@ -18,8 +18,12 @@ export const showProduct = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
-	const theProduct = await PRODUCTS.showProduct(req.params.id as string);
-	res.status(200).json({ ...theProduct });
+	try {
+		const theProduct = await PRODUCTS.showProduct(req.params.id as string);
+		res.status(200).json({ ...theProduct });
+	} catch (err) {
+		res.status(500).send(err);
+	}
 };
 
 // create product
@@ -47,6 +51,10 @@ export const deleteProduct = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
-	await PRODUCTS.deleteProduct(req.params.id as string);
-	res.json({ message: "Product deleted successfully" });
+	try {
+		await PRODUCTS.deleteProduct(req.params.id as string);
+		res.json({ message: "Product deleted successfully" });
+	} catch (err) {
+		res.status(500).send(err);
+	}
 };

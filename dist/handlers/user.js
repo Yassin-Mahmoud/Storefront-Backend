@@ -8,15 +8,25 @@ const user_1 = require("../models/user");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const USERS = new user_1.users();
 const index = async (_req, res) => {
-    const theUsers = await USERS.index();
-    res.status(200).json({ ...theUsers });
+    try {
+        const theUsers = await USERS.index();
+        res.status(200).json({ ...theUsers });
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
 };
 exports.index = index;
 const showUser = async (req, res) => {
-    const theUser = await USERS.showUser(req.params.id);
-    res.json({
-        userInfo: { ...theUser },
-    });
+    try {
+        const theUser = await USERS.showUser(req.params.id);
+        res.json({
+            userInfo: { ...theUser },
+        });
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
 };
 exports.showUser = showUser;
 const createUser = async (req, res) => {
@@ -41,18 +51,28 @@ const createUser = async (req, res) => {
 };
 exports.createUser = createUser;
 const deleteUser = async (req, res) => {
-    await USERS.deleteUser(req.params.id);
-    res.json({
-        message: "user deleted successfully",
-    });
+    try {
+        await USERS.deleteUser(req.params.id);
+        res.json({
+            message: "user deleted successfully",
+        });
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
 };
 exports.deleteUser = deleteUser;
 const addProducts = async (req, res) => {
-    const addProduct = await USERS.addProduct(req.params.userId, req.body.productId, req.body.quantity);
-    res.status(200).json({
-        addedProduct: { ...addProduct },
-        message: "product added",
-    });
+    try {
+        const addProduct = await USERS.addProduct(req.params.userId, req.body.productId, req.body.quantity);
+        res.status(200).json({
+            addedProduct: { ...addProduct },
+            message: "product added",
+        });
+    }
+    catch (err) {
+        res.status(500).send(err);
+    }
 };
 exports.addProducts = addProducts;
 const authenticate = async (req, res) => {
