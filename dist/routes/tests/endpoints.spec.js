@@ -152,4 +152,4 @@ describe("Testing endpoints", () => {
         connect.release();
     });
 });
-//# sourceMappingURL=users.spec.js.map
+//# sourceMappingURL=endpoints.spec.js.map

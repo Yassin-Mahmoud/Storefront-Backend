@@ -7,7 +7,7 @@ const usersRoutes = Router();
 
 usersRoutes.get("/", verifyToken, handlers.index);
 usersRoutes.get("/:id/account", verifyToken, handlers.showUser);
-usersRoutes.post("/createuser", handlers.createUser);
+usersRoutes.post("/register", handlers.createUser);
 usersRoutes.delete("/:id/delete", verifyToken, handlers.deleteUser);
 usersRoutes.post("/:userId/addproduct", verifyToken, handlers.addProducts);
 usersRoutes.post("/authentication", handlers.authenticate);

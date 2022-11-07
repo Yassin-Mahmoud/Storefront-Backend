@@ -4,13 +4,18 @@ exports.deleteProduct = exports.createProduct = exports.showProduct = exports.in
 const products_1 = require("../models/products");
 const PRODUCTS = new products_1.products();
 const index = async (_req, res) => {
-    const theProducts = PRODUCTS.index();
-    res.json(theProducts);
+    try {
+        const theProducts = await PRODUCTS.index();
+        res.status(200).json({ ...theProducts });
+    }
+    catch (err) {
+        res.status(500).json(err);
+    }
 };
 exports.index = index;
 const showProduct = async (req, res) => {
-    const theProduct = PRODUCTS.showProduct(req.params.id);
-    res.json(theProduct);
+    const theProduct = await PRODUCTS.showProduct(req.params.id);
+    res.status(200).json({ ...theProduct });
 };
 exports.showProduct = showProduct;
 const createProduct = async (req, res) => {
@@ -21,17 +26,17 @@ const createProduct = async (req, res) => {
         };
         const newProduct = await PRODUCTS.createProduct(addNewProduct);
         res.json({
-            productData: { newProduct },
+            productData: { ...newProduct },
             message: "products created successfully",
         });
     }
     catch (err) {
-        res.status(200).json(err);
+        res.status(500).json(err);
     }
 };
 exports.createProduct = createProduct;
 const deleteProduct = async (req, res) => {
-    const deleted = PRODUCTS.deleteProduct(req.params.id);
+    await PRODUCTS.deleteProduct(req.params.id);
     res.json({ message: "Product deleted successfully" });
 };
 exports.deleteProduct = deleteProduct;

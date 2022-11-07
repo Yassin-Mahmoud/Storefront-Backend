@@ -1,16 +1,13 @@
 import { Request, Response } from "express";
 import { user, users } from "../models/user";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const USERS = new users();
 
 // show users
 export const index = async (_req: Request, res: Response): Promise<void> => {
 	const theUsers = await USERS.index();
-	res.status(200).json(theUsers);
+	res.status(200).json({ ...theUsers });
 };
 
 // show a specific user
@@ -50,7 +47,7 @@ export const deleteUser = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
-	const deleted = await USERS.deleteUser(req.params.id as string);
+	await USERS.deleteUser(req.params.id as string);
 	res.json({
 		message: "user deleted successfully",
 	});
@@ -67,7 +64,7 @@ export const addProducts = async (
 		req.body.quantity as number
 	);
 	res.status(200).json({
-		product: { ...addProduct },
+		addedProduct: { ...addProduct },
 		message: "product added",
 	});
 };

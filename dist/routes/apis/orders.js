@@ -30,7 +30,7 @@ const express_1 = require("express");
 const handlers = __importStar(require("../../handlers/orders"));
 const authentication_1 = __importDefault(require("../../middleware/authentication"));
 const orderRoutes = (0, express_1.Router)();
-orderRoutes.get("/user/:userId", authentication_1.default, handlers.showUserCompletedOrders);
+orderRoutes.get("/completed/user/:userId", authentication_1.default, handlers.showUserCompletedOrders);
 orderRoutes.get("/active/user/:userId", authentication_1.default, handlers.showActiveOrder);
 orderRoutes.put("/user/:userId/ordercompleted", authentication_1.default, handlers.changeStatus);
 exports.default = orderRoutes;

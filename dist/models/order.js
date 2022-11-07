@@ -19,22 +19,16 @@ class orders {
         }
     }
     async showCompletedOrders(userId) {
-        const connect = await database_1.default.connect();
-        const sql = "SELECT * FROM orders WHERE userId=($1) AND status='completed'";
-        const result = await connect.query(sql, [userId]);
-        connect.release();
-        return result.rows[0];
-    }
-    async showOrder(orderId, userId) {
         try {
             const connect = await database_1.default.connect();
-            const sql = "SELECT * FROM orders WHERE id=($1) AND userId=($2)";
-            const result = await connect.query(sql, [orderId, userId]);
+            const sql = "SELECT id, userId, status FROM orders WHERE userId=($1) AND status='completed'";
+            const result = await connect.query(sql, [userId]);
+            const ordersList = result.rows;
             connect.release();
-            return result.rows[0];
+            return ordersList;
         }
         catch (err) {
-            throw new Error(`cannot show order : ${err}`);
+            throw new Error(`no completed orders : ${err}`);
         }
     }
     async showActiveOrder(userId) {
@@ -55,10 +49,9 @@ class orders {
             const activeOrder = "SELECT * FROM orders WHERE userId=($1) AND status='active'";
             const activeOrderQuery = await connect.query(activeOrder, [userId]);
             if (activeOrderQuery.rows[0]) {
-                const sqlOrderId = "SELECT id FROM orders WHERE userId=($1) AND status='active'";
-                const sqlOrderIdResult = await connect.query(sqlOrderId, [userId]);
-                const sql = "UPDATE orders SET status='completed' WHERE userId=($1) AND id=($2)";
-                const result = await connect.query(sql, [userId, sqlOrderIdResult]);
+                const orderId = activeOrderQuery.rows[0].id;
+                const sql = "UPDATE orders SET status='completed' WHERE userId=($1) AND id=($2) RETURNING *";
+                const result = await connect.query(sql, [userId, orderId]);
                 connect.release();
                 return result.rows[0];
             }

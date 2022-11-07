@@ -32,7 +32,7 @@ const authentication_1 = __importDefault(require("../../middleware/authenticatio
 const usersRoutes = (0, express_1.Router)();
 usersRoutes.get("/", authentication_1.default, handlers.index);
 usersRoutes.get("/:id/account", authentication_1.default, handlers.showUser);
-usersRoutes.post("/createuser", handlers.createUser);
+usersRoutes.post("/register", handlers.createUser);
 usersRoutes.delete("/:id/delete", authentication_1.default, handlers.deleteUser);
 usersRoutes.post("/:userId/addproduct", authentication_1.default, handlers.addProducts);
 usersRoutes.post("/authentication", handlers.authenticate);

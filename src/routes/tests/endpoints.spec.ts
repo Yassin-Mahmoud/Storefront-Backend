@@ -17,22 +17,29 @@ describe("Testing endpoints", () => {
 		password: "test12321",
 	} as user;
 
+	const testUser2 = {
+		firstName: "test2",
+		lastName: "test2",
+		userName: "test1232",
+		password: "test12321",
+	} as user;
+
 	var token: string;
 	var productId: string;
-	var orderId: string;
 
 	beforeAll(async () => {
 		const newUser = await USERS.createUser(testUser);
 		testUser.id = newUser.id;
-		const newOrder = await ORDERS.createOrder(testUser.id as string);
-		orderId = newOrder.id;
+		const newUser2 = await USERS.createUser(testUser2);
+		testUser2.id = newUser2.id;
+		await ORDERS.createOrder(testUser.id as string);
 	});
 
-	// Users endpoint testing
+	// USERS ENDPOINT TESTING
 	describe("Testing users endpoint", () => {
 		// Testing [ create user ] endpoint
 		it("Should be able to create a new user", async () => {
-			const response = await request.post("/users/createuser").send({
+			const response = await request.post("/users/register").send({
 				firstName: "test0",
 				lastName: "test0",
 				userName: "test132",
@@ -40,6 +47,7 @@ describe("Testing endpoints", () => {
 			});
 			expect(response.status).toBe(200);
 			expect(response.body).toBeInstanceOf(Object);
+			expect(response.body.new_user.username).toBe("test132");
 		});
 
 		// Testing [ authenticate ] endpoint
@@ -52,6 +60,7 @@ describe("Testing endpoints", () => {
 			expect(response.body).toBeInstanceOf(Object);
 			const { id, token: accessToken } = response.body.userInfo;
 			expect(id).toBe(testUser.id);
+			expect(response.body.userInfo.token).toBeDefined();
 			token = accessToken;
 		});
 
@@ -72,12 +81,13 @@ describe("Testing endpoints", () => {
 			expect(response.status).toBe(200);
 			expect(response.body).toBeInstanceOf(Object);
 			expect(response.body.userInfo.id).toBe(testUser.id);
+			expect(response.body.userInfo.username).toBe(testUser.userName);
 		});
 
 		// Testing [ delete user ] endpoint
 		it("Should be able to delete a user", async () => {
 			const response = await request
-				.delete(`/users/${testUser.id}/delete`)
+				.delete(`/users/${testUser2.id}/delete`)
 				.set("Authorization", `Bearer ${token}`);
 			expect(response.status).toBe(200);
 			expect(response.body).toBeInstanceOf(Object);
@@ -85,7 +95,7 @@ describe("Testing endpoints", () => {
 		});
 	});
 
-	// Products endpoint testing
+	// PRODUCTS ENDPOINT TESTING
 	describe("Testing products endpoint", () => {
 		// Testing [ create product ] endpoint
 		it("Should be able to create a new product", async () => {
@@ -99,6 +109,8 @@ describe("Testing endpoints", () => {
 			productId = response.body.productData.id;
 			expect(response.status).toBe(200);
 			expect(response.body).toBeInstanceOf(Object);
+			expect(response.body.productData.name).toBe("product for testing");
+			expect(response.body.message).toBe("products created successfully");
 		});
 
 		// Testing [ show products ] endpoint
@@ -114,14 +126,14 @@ describe("Testing endpoints", () => {
 				.get(`/products/${productId}`)
 				.set("Authorization", `Bearer ${token}`);
 			expect(response.status).toBe(200);
-			expect(response.body).toBeInstanceOf(Object);
 			expect(response.body.id).toBe(productId);
+			expect(response.body.name).toBe("product for testing");
 		});
 
 		// Testing [ delete product ] endpoint
 		it("Should be able to delete a product", async () => {
 			const response = await request
-				.delete(`/products/delete/${productId}`)
+				.delete(`/products/${productId}/delete`)
 				.set("Authorization", `Bearer ${token}`);
 			expect(response.status).toBe(200);
 			expect(response.body).toBeInstanceOf(Object);
@@ -129,7 +141,7 @@ describe("Testing endpoints", () => {
 		});
 	});
 
-	// Orders endpoint testing
+	// ORDERS ENDPOINT TESTING
 	describe("Testing orders endpoint", () => {
 		// Testing [ show active order ] endpoint
 		it("Should be able to show active order", async () => {
@@ -138,6 +150,7 @@ describe("Testing endpoints", () => {
 				.set("Authorization", `Bearer ${token}`);
 			expect(response.status).toBe(200);
 			expect(response.body).toBeInstanceOf(Object);
+			expect(response.body.status).toBe("active");
 		});
 
 		// Testing [ change status ] endpoint
@@ -145,9 +158,19 @@ describe("Testing endpoints", () => {
 			const response = await request
 				.put(`/orders/user/${testUser.id}/ordercompleted`)
 				.set("Authorization", `Bearer ${token}`);
+
 			expect(response.status).toBe(200);
 			expect(response.body).toBeInstanceOf(Object);
 			expect(response.body.status).toBe("completed");
+		});
+
+		// Testing [ show completed orders ] exnpoint
+		it("Should be able to show completed orders", async () => {
+			const response = await request
+				.get(`/orders/completed/user/${testUser.id}`)
+				.set("Authorization", `Bearer ${token}`);
+			expect(response.status).toBe(200);
+			expect(response.body).toBeInstanceOf(Object);
 		});
 	});
 

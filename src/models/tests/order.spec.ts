@@ -1,5 +1,5 @@
 import db from "../../database";
-import { orders, order } from "../order";
+import { orders } from "../order";
 import { user, users } from "../user";
 
 const ORDERS = new orders();
@@ -29,20 +29,6 @@ describe("Testing orders model", () => {
 			const newOrder = await ORDERS.createOrder(testUser.id as string);
 			expect(newOrder).toBeDefined();
 			orderId = newOrder.id;
-		});
-	});
-
-	// Testing [ showOrder ] method
-	describe("Show order", () => {
-		it("method exists", () => {
-			expect(ORDERS.showOrder).toBeDefined();
-		});
-		it("shows a specific order belongs to the user", async () => {
-			const userOrder = await ORDERS.showOrder(
-				testUser.id as string,
-				orderId as string
-			);
-			expect(userOrder).not.toBeNull();
 		});
 	});
 

@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.users = void 0;
 const database_1 = __importDefault(require("../database"));
+const order_1 = require("./order");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const ORDERS = new order_1.orders();
 const passwordHashing = (password) => {
     const salt = parseInt(process.env.SALT_ROUNDS);
     return bcrypt_1.default.hashSync(`${password}${process.env.PEPPER}`, salt);
@@ -22,7 +22,7 @@ class users {
             return result.rows;
         }
         catch (err) {
-            throw new Error(`cannot get user information: ${err}`);
+            throw new Error(`failed to show users: ${err}`);
         }
     }
     async showUser(id) {
@@ -92,8 +92,7 @@ class users {
                 }
             }
             else {
-                const sql = "INSERT INTO orders (userId,  status) VALUES($1, $2) RETURNING *";
-                await connect.query(sql, [userId, "active"]);
+                await ORDERS.createOrder(userId);
                 const orderIdSql = "SELECT id FROM orders WHERE userId=($1) AND status='active'";
                 const orderIdSqlResult = await connect.query(orderIdSql, [userId]);
                 const orderId = orderIdSqlResult.rows[0].id;

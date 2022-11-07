@@ -30,15 +30,6 @@ describe("Testing orders model", () => {
             orderId = newOrder.id;
         });
     });
-    describe("Show order", () => {
-        it("method exists", () => {
-            expect(ORDERS.showOrder).toBeDefined();
-        });
-        it("shows a specific order belongs to the user", async () => {
-            const userOrder = await ORDERS.showOrder(testUser.id, orderId);
-            expect(userOrder).not.toBeNull();
-        });
-    });
     describe("Show active order", () => {
         it("method exists", () => {
             expect(ORDERS.showActiveOrder).toBeDefined();

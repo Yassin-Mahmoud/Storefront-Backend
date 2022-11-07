@@ -9,7 +9,7 @@ class products {
     async index() {
         try {
             const connect = await database_1.default.connect();
-            const sql = "SELECT id, name, price FROM products";
+            const sql = "SELECT * FROM products";
             const result = await connect.query(sql);
             connect.release();
             return result.rows;
@@ -51,7 +51,7 @@ class products {
             return result.rows[0];
         }
         catch (err) {
-            throw new Error(`failed to delete product: ${err}`);
+            throw new Error(`cannot delete product: ${err}`);
         }
     }
 }

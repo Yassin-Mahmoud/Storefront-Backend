@@ -1,10 +1,8 @@
 import db from "../../database";
 import { user, users } from "../user";
-// import { orderProducts, order, orders } from "../order";
-// import { products, product } from "../products";
+import { products, product } from "../products";
 
-// const PRODUCTS = new products();
-// const ORDERS = new orders();
+const PRODUCTS = new products();
 const USERS = new users();
 
 // USER MODEL TESTING
@@ -33,9 +31,6 @@ describe("Testing user model", () => {
 
 	// Testing [ index ] method
 	describe("Get all users", () => {
-		it("method exists", () => {
-			expect(USERS.index).toBeDefined();
-		});
 		it("returns all users", async () => {
 			const allUsers = await USERS.index();
 			expect(allUsers.length).toBe(1);
@@ -68,6 +63,29 @@ describe("Testing user model", () => {
 		});
 	});
 
+	// Testing [ addProduct ] method
+	describe("Adding products to user's order", () => {
+		it("method exists", () => {
+			expect(USERS.addProduct).toBeDefined();
+		});
+		const testProduct = {
+			name: "product test",
+			price: "1",
+		} as product;
+		it("creates products for testing", async () => {
+			const newProduct = await PRODUCTS.createProduct(testProduct);
+			testProduct.id = newProduct.id;
+		});
+		it("add the product to the user's order", async () => {
+			const addProductToOrder = await USERS.addProduct(
+				testUser.id as string,
+				testProduct.id as string,
+				10
+			);
+			expect(addProductToOrder).toBeDefined();
+		});
+	});
+
 	// Testing [ deleteUser ] method
 	describe("Delete a user", () => {
 		it("method exists", () => {
@@ -79,38 +97,12 @@ describe("Testing user model", () => {
 		});
 	});
 
-	// Testing [ addProduct ] method
-	// describe("Adding products to user's order", () => {
-	// 	it("method exists", () => {
-	// 		expect(USERS.addProduct).toBeDefined();
-	// 	});
-
-	// 	const testProduct = {
-	// 		name: "product test",
-	// 		price: "1",
-	// 	} as product;
-	// 	it("creates products for testing", async () => {
-	// 		const newProduct = await PRODUCTS.createProduct(testProduct);
-	// 		testProduct.id = newProduct.id;
-	// 	});
-
-	// 	it("adds the product to the user's order", async () => {
-	// 		const addProductToOrder = await USERS.addProduct(
-	// 			testUser.id as string,
-	// 			testProduct.id as string,
-	// 			10
-	// 		);
-	// 		// expect(newProduct.id).toEqual(testProduct.id);
-	// 		expect(addProductToOrder).not.toBeUndefined();
-	// 	});
-	// });
-
 	// Deleting user after testing
 	afterAll(async () => {
 		const connect = await db.connect();
 		await connect.query("DELETE FROM users");
-		// await connect.query("DELETE FROM orders");
-		// await connect.query("DELETE FROM products");
+		await connect.query("DELETE FROM orders");
+		await connect.query("DELETE FROM products");
 		connect.release();
 	});
 });

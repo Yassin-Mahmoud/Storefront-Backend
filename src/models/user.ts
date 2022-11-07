@@ -1,9 +1,7 @@
 import db from "../database";
 import { order } from "./order";
+import { orders } from "./order";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 export type user = {
 	id?: String;
@@ -12,6 +10,8 @@ export type user = {
 	userName: String;
 	password: String;
 };
+
+const ORDERS = new orders();
 
 // hashing function
 const passwordHashing = (password: string) => {
@@ -28,7 +28,7 @@ export class users {
 			connect.release();
 			return result.rows;
 		} catch (err) {
-			throw new Error(`cannot get user information: ${err}`);
+			throw new Error(`failed to show users: ${err}`);
 		}
 	}
 
@@ -116,14 +116,14 @@ export class users {
 				}
 			} else {
 				// create active order
-				const sql =
-					"INSERT INTO orders (userId,  status) VALUES($1, $2) RETURNING *";
-				await connect.query(sql, [userId, "active"]);
+				await ORDERS.createOrder(userId);
+
 				// getting active order id
 				const orderIdSql =
 					"SELECT id FROM orders WHERE userId=($1) AND status='active'";
 				const orderIdSqlResult = await connect.query(orderIdSql, [userId]);
 				const orderId = orderIdSqlResult.rows[0].id;
+
 				// add product to the order
 				try {
 					const sqlProduct =
