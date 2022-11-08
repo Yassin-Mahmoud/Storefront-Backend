@@ -9,14 +9,14 @@ These are the notes from a meeting with the frontend developer that describe wha
 #### Products
 
 - Index : [get] '/products'
-- Show : [get] '/products/:id'
+- Show : [get] '/products/productId'
 - Create : [post] '/products/createproduct' [token required]
-- Delete : [delete] '/products/:id/delete' [token required]
+- Delete : [delete] '/products/productId/delete' [token required]
 
 #### Users
 
 - Index : [get] '/users' [token required]
-- Show : [get] '/users/:id/account' [token required]
+- Show : [get] '/users/userId/account' [token required]
 - Create : [post] '/users/register' [token required]
 - Delete : [delete] '/users/:userId/delete [token required]
 - Authentication : [post] '/users/authentication'

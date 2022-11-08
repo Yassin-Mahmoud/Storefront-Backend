@@ -17,7 +17,7 @@ export const index = async (_req: Request, res: Response): Promise<void> => {
 // show a specific user
 export const showUser = async (req: Request, res: Response): Promise<void> => {
 	try {
-		const theUser = await USERS.showUser(req.params.id as string);
+		const theUser = await USERS.showUser(req.params.userId as string);
 		res.json({
 			userInfo: { ...theUser },
 		});
@@ -56,7 +56,7 @@ export const deleteUser = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		await USERS.deleteUser(req.params.id as string);
+		await USERS.deleteUser(req.params.userId as string);
 		res.json({
 			message: "user deleted successfully",
 		});

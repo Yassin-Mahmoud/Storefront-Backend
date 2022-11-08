@@ -9,7 +9,8 @@ const verifyToken = (req: Request, res: Response, next: NextFunction): void => {
 		// check if auth header exists
 		if (authHeader) {
 			const token = authHeader.split(" ")[1];
-			jwt.verify(token, process.env.SECRET_TOKEN as string as jwt.Secret);
+			jwt.verify(token, process.env.SECRET_TOKEN as jwt.Secret);
+
 			next();
 		} else {
 			throw new Error("no authHeader [ not authenticated ]");

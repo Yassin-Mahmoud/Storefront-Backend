@@ -6,9 +6,9 @@ import verifyToken from "../../middleware/authentication";
 const usersRoutes = Router();
 
 usersRoutes.get("/", verifyToken, handlers.index);
-usersRoutes.get("/:id/account", verifyToken, handlers.showUser);
+usersRoutes.get("/:userId/account", verifyToken, handlers.showUser);
 usersRoutes.post("/register", handlers.createUser);
-usersRoutes.delete("/:id/delete", verifyToken, handlers.deleteUser);
+usersRoutes.delete("/:userId/delete", verifyToken, handlers.deleteUser);
 usersRoutes.post("/:userId/addproduct", verifyToken, handlers.addProducts);
 usersRoutes.post("/authentication", handlers.authenticate);
 

@@ -31,8 +31,8 @@ const handlers = __importStar(require("../../handlers/product"));
 const authentication_1 = __importDefault(require("../../middleware/authentication"));
 const productsRoutes = (0, express_1.Router)();
 productsRoutes.get("/", handlers.index);
-productsRoutes.get("/:id", handlers.showProduct);
+productsRoutes.get("/:productId", handlers.showProduct);
 productsRoutes.post("/createproduct", authentication_1.default, handlers.createProduct);
-productsRoutes.delete("/:id/delete", authentication_1.default, handlers.deleteProduct);
+productsRoutes.delete("/:productId/delete", authentication_1.default, handlers.deleteProduct);
 exports.default = productsRoutes;
 //# sourceMappingURL=products.js.map

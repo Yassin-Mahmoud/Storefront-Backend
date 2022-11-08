@@ -19,7 +19,7 @@ const index = async (_req, res) => {
 exports.index = index;
 const showUser = async (req, res) => {
     try {
-        const theUser = await USERS.showUser(req.params.id);
+        const theUser = await USERS.showUser(req.params.userId);
         res.json({
             userInfo: { ...theUser },
         });
@@ -52,7 +52,7 @@ const createUser = async (req, res) => {
 exports.createUser = createUser;
 const deleteUser = async (req, res) => {
     try {
-        await USERS.deleteUser(req.params.id);
+        await USERS.deleteUser(req.params.userId);
         res.json({
             message: "user deleted successfully",
         });
