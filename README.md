@@ -43,5 +43,6 @@
 
 ## Notes
 
+- You cannot create order by your self but the 'add product' endpoint in users route creates a new order with 'active' status and the product to it
 - The endpoints, database tables and columns are shown in the REQUIREMENTS.md file
 - You can run `db-migrate reset` to delete all database tables
