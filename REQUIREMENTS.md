@@ -58,5 +58,5 @@ These are the notes from a meeting with the frontend developer that describe wha
 - orderId : [ VARCHAR(50) NOT NULL ]
 - productId : [ VARCHAR(50) NOT NULL ]
 - quantity : [ INTEGER DEFAULT (1) ]
-  [ FOREIGN KEY(orderId) REFERENCES orders(id) ON DELETE CASCADE ]
-  [ FOREIGN KEY(productId) REFERENCES products(id) ON DELETE CASCADE ]
+- [ FOREIGN KEY(orderId) REFERENCES orders(id) ON DELETE CASCADE ]
+- [ FOREIGN KEY(productId) REFERENCES products(id) ON DELETE CASCADE ]
