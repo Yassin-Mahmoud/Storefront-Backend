@@ -12,7 +12,6 @@ These are the notes from a meeting with the frontend developer that describe wha
 - Show : [get] '/products/:id'
 - Create : [post] '/products/createproduct' [token required]
 - Delete : [delete] '/products/:id/delete' [token required]
--
 
 #### Users
 
