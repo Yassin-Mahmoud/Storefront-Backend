@@ -19,7 +19,9 @@ export const showProduct = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		const theProduct = await PRODUCTS.showProduct(req.params.id as string);
+		const theProduct = await PRODUCTS.showProduct(
+			req.params.productId as string
+		);
 		res.status(200).json({ ...theProduct });
 	} catch (err) {
 		res.status(500).send(err);
@@ -52,7 +54,7 @@ export const deleteProduct = async (
 	res: Response
 ): Promise<void> => {
 	try {
-		await PRODUCTS.deleteProduct(req.params.id as string);
+		await PRODUCTS.deleteProduct(req.params.productId as string);
 		res.json({ message: "Product deleted successfully" });
 	} catch (err) {
 		res.status(500).send(err);

@@ -15,7 +15,7 @@ const index = async (_req, res) => {
 exports.index = index;
 const showProduct = async (req, res) => {
     try {
-        const theProduct = await PRODUCTS.showProduct(req.params.id);
+        const theProduct = await PRODUCTS.showProduct(req.params.productId);
         res.status(200).json({ ...theProduct });
     }
     catch (err) {
@@ -42,7 +42,7 @@ const createProduct = async (req, res) => {
 exports.createProduct = createProduct;
 const deleteProduct = async (req, res) => {
     try {
-        await PRODUCTS.deleteProduct(req.params.id);
+        await PRODUCTS.deleteProduct(req.params.productId);
         res.json({ message: "Product deleted successfully" });
     }
     catch (err) {
