@@ -8,7 +8,7 @@
 		"build": "npx tsc",
 		"start": "npm run build && node dist/server.js",
 		"jasmine": "jasmine",
-		"test": "export NODE_ENV=test && db-migrate up --env test && tsc && npm run jasmine && db-migrate reset"
+		"test": "db-migrate reset && export NODE_ENV=test && db-migrate up --env test && tsc && npm run jasmine && db-migrate reset"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^5.0.0",
@@ -30,6 +30,7 @@
 		"jasmine-spec-reporter": "^7.0.0",
 		"jasmine-ts": "^0.4.0",
 		"mocha": "^2.5.2",
+		"nodemon": "^2.0.20",
 		"standard-version": "^2.2.1",
 		"supertest": "^6.3.1",
 		"ts-node": "^10.9.1",

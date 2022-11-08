@@ -1,21 +1,23 @@
 {
-    "defaultEnv": { "ENV": "NODE_ENV" },
-    "dev": {
-        "driver": "pg",
-        "name": "storefront",
-        "previewLimit": 50,
-        "server": { "ENV": "POSTGRES_HOST" },
-        "port": { "ENV": "POSTGRES_PORT" },
-        "database": { "ENV": "POSTGRES_DB" },
-        "username": { "ENV": "POSTGRES_USER" },
-        "password": { "ENV": "POSTGRES_PASSWORD" }
-    },
-    "test": {
-        "driver": "pg",
-        "host": { "ENV": "POSTGRES_HOST" },
-        "port": { "ENV": "POSTGRES_PORT" },
-        "database": { "ENV": "TEST_POSTGRES_DB" },
-        "user": { "ENV": "POSTGRES_USER" },
-        "password": { "ENV": "POSTGRES_PASSWORD" }
-    }
+	"defaultEnv": { "ENV": "NODE_ENV" },
+	"dev": {
+		"driver": "pg",
+		"name": "storefront",
+		"previewLimit": 50,
+		"server": { "ENV": "POSTGRES_HOST" },
+		"port": { "ENV": "POSTGRES_PORT" },
+		"database": { "ENV": "POSTGRES_DB" },
+		"username": { "ENV": "POSTGRES_USER" },
+		"password": { "ENV": "POSTGRES_PASSWORD" }
+	},
+	"test": {
+		"driver": "pg",
+		"name": "storefront",
+		"previewLimit": 50,
+		"server": { "ENV": "POSTGRES_HOST" },
+		"port": { "ENV": "POSTGRES_PORT" },
+		"database": { "ENV": "TEST_POSTGRES_DB" },
+		"username": { "ENV": "POSTGRES_USER" },
+		"password": { "ENV": "POSTGRES_PASSWORD" }
+	}
 }
