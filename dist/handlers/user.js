@@ -78,11 +78,13 @@ exports.addProducts = addProducts;
 const authenticate = async (req, res) => {
     try {
         const auth = await USERS.authentication(req.body.userName, req.body.password);
-        const token = jsonwebtoken_1.default.sign(auth, process.env.SECRET_TOKEN);
-        return res.status(200).json({
-            userInfo: { ...auth, token },
-            message: "you are authenticated",
-        });
+        if (auth) {
+            const token = jsonwebtoken_1.default.sign(auth, process.env.SECRET_TOKEN);
+            return res.status(200).json({
+                userInfo: { ...auth, token },
+                message: "you are authenticated",
+            });
+        }
     }
     catch (err) {
         throw new Error(`you are not authenticated: ${err}`);

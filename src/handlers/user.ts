@@ -92,11 +92,13 @@ export const authenticate = async (req: Request, res: Response) => {
 			req.body.userName as string,
 			req.body.password as string
 		);
-		const token = jwt.sign(auth, process.env.SECRET_TOKEN as string);
-		return res.status(200).json({
-			userInfo: { ...auth, token },
-			message: "you are authenticated",
-		});
+		if (auth) {
+			const token = jwt.sign(auth, process.env.SECRET_TOKEN as string);
+			return res.status(200).json({
+				userInfo: { ...auth, token },
+				message: "you are authenticated",
+			});
+		}
 	} catch (err) {
 		throw new Error(`you are not authenticated: ${err}`);
 	}
